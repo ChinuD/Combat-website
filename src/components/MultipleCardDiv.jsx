@@ -1,27 +1,49 @@
-import React from 'react'
-import Card from './Card'
-import Card2 from './Card2'
+import React, { useRef, useEffect } from "react";
+import Card2 from "./Card2";
 
-function MultipleCardDiv() {
+function MultipleCardDiv({ day, date, events }) {
+  const scrollContainerRef = useRef(null);
+
+  useEffect(() => {
+    const handleWheelScroll = (e) => {
+      if (scrollContainerRef.current) {
+        e.preventDefault();
+        scrollContainerRef.current.scrollLeft += e.deltaY;
+      }
+    };
+
+    const scrollContainer = scrollContainerRef.current;
+    if (scrollContainer) {
+      scrollContainer.addEventListener("wheel", handleWheelScroll);
+    }
+
+    return () => {
+      if (scrollContainer) {
+        scrollContainer.removeEventListener("wheel", handleWheelScroll);
+      }
+    };
+  }, []);
+
   return (
-    <div>
-        <div class="bg-gray-900 p-4">
-  <h2 class="text-white text-lg mb-4">Schedule</h2>
-  <div class="flex gap-4 overflow-x-auto scroll-smooth no-scrollbar p-4 rounded-lg">
-    {/* <!-- Card 1 --> */}
-    <Card2/>
-    <Card2/>
-    <Card2/>
-    <Card2/>
+    <div className="bg-black pl-2 border-s-amber-100 flex flex-row items-center max-w-[98%] rounded-md">
+      {/* Date Section */}
+      <div className="min-h-full flex flex-col justify-self-center h-min justify-center border-0 border-r-2 px-1 backdrop-filter bg-white backdrop-blur-sm bg-opacity-5 border-gray-100">
+        <h2 className="text-white text-lg ">Day: {day}</h2>
+        <h2 className="text-white text-lg ">Date: {date}</h2>
+      </div>
 
-    {/* <!-- Duplicate the above card for more cards --> */}
-    <Card2/>
-    {/* <!-- Add more cards here --> */}
-  </div>
-</div>
-
+      {/* Card Scrolling Section */}
+      <div
+        ref={scrollContainerRef}
+        className="flex gap-4 overflow-x-auto scroll-smooth no-scrollbar p-4 rounded-lg border-white"
+      >
+        {/* Render Cards Dynamically */}
+        {events.map((event, index) => (
+          <Card2 key={index} {...event} />
+        ))}
+      </div>
     </div>
-  )
+  );
 }
 
-export default MultipleCardDiv
+export default MultipleCardDiv;

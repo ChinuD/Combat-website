@@ -5,7 +5,8 @@ import SlotSection from './components/SlotSection'
 
 const App = () => {
   return (
-    <div>
+    <div className='bg-gray-900'>
+      <h1 className='text-center text-white text-4xl py-4'>Schedule</h1>
       {/* <Card/> */}
       {/* <MultipleCardDiv/> */}
       <SlotSection/>
